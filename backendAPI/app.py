@@ -13,7 +13,7 @@ CORS(app)
 @app.route('/', methods=['GET'])
 def display_data():
     data = load_data()
-    return data[:2].to_json(orient='records')
+    return data.to_json(orient='records')
 
 @app.route('/api/country/getCountries', methods=['GET'])
 def get_countrydata():
@@ -53,13 +53,19 @@ def get_yearData():
     data = load_data()
     from_year = request.args.get('from')
     to_year = request.args.get('to')
-    rangeData = data[(data['year'] == int(from_year)) | (data['year'] == int(to_year))]
-    return rangeData.to_json(orient='records')
+    countryName = request.args.get('country')
+    disasterType = request.args.get('type')
+    rangeData = data[(data['year'].between(int(from_year), int(to_year), inclusive=True)) &
+    (data['countryName'] == countryName) & (data['disasterType'] == disasterType)]
+    # & (data['disasterType'] == disasterType)
+    groupingSum = (rangeData.groupby(['year', 'disasterType'], as_index=False)).sum()
+    # grouping = rangeData.groupby(['disasterType', 'year'], as_index=False)
+    # print(grouping.apply(lambda x: x.to_json(orient='records')))
+    return groupingSum.to_json(orient='records')
+    # to_json(orient='records')
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-
 
   # with open("static/input/Data.csv", "r") as csv_file:
     #     csv_reader = csv.reader(csv_file)
