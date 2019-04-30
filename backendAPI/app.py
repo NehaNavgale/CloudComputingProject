@@ -5,6 +5,14 @@ from flask_cors import CORS, cross_origin
 def load_data():
   csv_data = pd.read_csv("static/input/Data.csv", sep=',')
   csv_data.set_index("countryName")
+  csv_data.sort_values(["countryName"], axis=0,
+                   ascending=True, inplace=True)
+  return csv_data
+
+
+def loadEmissionData():
+  csv_data = pd.read_csv("static/input/nation.1751_2014_new.csv", sep=',')
+  csv_data.set_index("Nation")
   return csv_data
 
 app = Flask(__name__)
@@ -19,7 +27,9 @@ def display_data():
 def get_countrydata():
     data = load_data()
     countryData = data.countryName.unique()
+    print(countryData)
     frameCountry = pd.DataFrame(countryData)
+    # frameCountry = frameCountry.sort_values(by=['countryName'])
     return frameCountry.to_json(orient='records')
 
 @app.route('/api/type/getDisasterType', methods=['GET'])
@@ -60,9 +70,74 @@ def get_yearData():
     # & (data['disasterType'] == disasterType)
     groupingSum = (rangeData.groupby(['year', 'disasterType'], as_index=False)).sum()
     # grouping = rangeData.groupby(['disasterType', 'year'], as_index=False)
-    # print(grouping.apply(lambda x: x.to_json(orient='records')))
+    # print(groupingSum.apply(lambda x: x.to_json(orient='records')))
     return groupingSum.to_json(orient='records')
     # to_json(orient='records')
+
+@app.route('/api/typeCompare', methods=['GET'])
+def get_typeCompareData():
+    data = load_data()
+    from_year = request.args.get('from')
+    to_year = request.args.get('to')
+    countryName = request.args.get('country')
+    rangeData = data[(data['year'].between(int(from_year), int(to_year), inclusive=True)) &
+    (data['countryName'] == countryName)]
+    # & (data['disasterType'] == disasterType)
+    groupingSum = (rangeData.groupby(['year', 'disasterType'], as_index=False)).sum()
+    # grouping = rangeData.groupby(['disasterType', 'year'], as_index=False)
+    # print(groupingSum.apply(lambda x: x.to_json(orient='records')))
+    return groupingSum.to_json(orient='records')
+    # to_json(orient='records')
+
+@app.route('/api/countryCompare', methods=['GET'])
+def get_countryCompareData():
+    data = load_data()
+    from_year = request.args.get('from')
+    to_year = request.args.get('to')
+    fCountryName = request.args.get('FirstCountry')
+    sCountryName = request.args.get('SecondCountry')
+    disasterType = request.args.get('type')
+    rangeData = data[(data['year'].between(int(from_year), int(to_year), inclusive=True)) &
+                     ((data['countryName'] == fCountryName) | (data['countryName'] == sCountryName)) &
+                     (data['disasterType'] == disasterType)]
+    # & (data['disasterType'] == disasterType)
+    groupingSum = (rangeData.groupby(['year', 'countryName'], as_index=False)).sum()
+    # grouping = rangeData.groupby(['disasterType', 'year'], as_index=False)
+    # print(groupingSum.apply(lambda x: x.to_json(orient='records')))
+    return groupingSum.to_json(orient='records')
+    # to_json(orient='records')
+
+@app.route('/api/countryMap', methods=['GET'])
+def get_countryMap():
+    data = load_data()
+    # disasterType = request.args.get('type')
+    # rangeData = data[(data['disasterType'] == disasterType)]
+    # & (data['disasterType'] == disasterType)
+    groupingSum = (data.groupby(['disasterType', 'countryName'], as_index=False)).sum()
+    # grouping = rangeData.groupby(['disasterType', 'year'], as_index=False)
+    # print(groupingSum.apply(lambda x: x.to_json(orient='records')))
+    return groupingSum.to_json(orient='records')
+    # to_json(orient='records')
+
+@app.route('/api/getEmissionData', methods=['GET'])
+def get_EmissionData():
+    data = loadEmissionData()
+    from_year = request.args.get('from')
+    to_year = request.args.get('to')
+    countryName = request.args.get('countryName')
+    rangeData = data[(data['Year'].between(int(from_year), int(to_year), inclusive=True)) & (data['Nation'] == countryName)]
+    groupingSum = (rangeData.groupby(['Year', 'Nation'], as_index=False)).sum()
+    return groupingSum.to_json(orient='records')
+
+# Emperical View
+@app.route('/api/getReportedEvents', methods=['GET'])
+def get_ReportedEventData():
+    data = load_data()
+    # rangeData = data[(data['year'].between(2000, 2018, inclusive=True))]
+    groupingSum = (data.groupby(['year'], as_index=False)).sum()
+    frameType = pd.DataFrame(groupingSum)
+    return frameType.to_json(orient='records')
+
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -17,40 +17,45 @@ export class ReportComponent implements OnInit {
   filterData;
   fromValue = 2010;
   toValue = 2018;
+  // chart labels
+  occuranceLabels = [];
+  deathLabels = [];
+  economyLabels = [];
+  affectedLabels = [];
+  // chart data
+  occuranceData = [];
+  deathData = [];
+  economyData = [];
+  affectedData = [];
   // dropdowns
   countries;
   disasterType;
   yearData;
   // schema
   data: Data[];
-  // data from api
-  totalDeaths = [];
-  totalOccurance = [];
-  economyDamage = [];
-  totalPeopleAffected = [];
   // chart options
   occuranceOptions = {
-    responsive: true
+    responsive: true,
+    elements: {
+      line: {
+        tension: 0
+      }
+    }
   };
   deathOptions = {
     responsive: true
   };
   economyOptions = {
-    responsive: true
+    responsive: true,
+    elements: {
+      line: {
+        tension: 0
+      }
+    }
   };
   affectedOptions = {
     responsive: true
   };
-  // chart data
-  occuranceData = [];
-  deathData = [];
-  economyData = [];
-  affectedData = [];
-  // chart labels
-  occuranceLabels = [];
-  deathLabels = [];
-  economyLabels = [];
-  affectedLabels = [];
 
   // test
   lookup = {};
@@ -75,16 +80,6 @@ export class ReportComponent implements OnInit {
       pointHoverBackgroundColor: '#fff',
       pointHoverBorderColor: 'rgba(225,10,24,0.2)'
     }];
-    // ,
-    // { // second color
-    //   backgroundColor: 'rgba(225,10,24,0.2)',
-    //   borderColor: 'rgba(225,10,24,0.2)',
-    //   pointBackgroundColor: 'rgba(225,10,24,0.2)',
-    //   pointBorderColor: '#fff',
-    //   pointHoverBackgroundColor: '#fff',
-    //   pointHoverBorderColor: 'rgba(225,10,24,0.2)'
-    // }
-
   onChartClick(event) {
     console.log(event);
   }
@@ -130,33 +125,33 @@ export class ReportComponent implements OnInit {
   getRange() {
       // this.fromValue = 2000;
       // this.toValue = 2018;
+    this.occuranceLabels = [];
+    this.deathLabels = [];
+    this.economyLabels = [];
+    this.affectedLabels = [];
+    // data from api
+    const totalDeaths = [];
+    const totalOccurance = [];
+    const economyDamage = [];
+    const totalPeopleAffected = [];
       console.log('country: ' + this.countryDropDownValue + ' type: ' + this.disasterDropdownValue);
     this.http.get(this.apiURL + '/yearRange?from=' + this.fromValue + '&to=' + this.toValue + '&country=' +
       this.countryDropDownValue + '&type=' + this.disasterDropdownValue).
     subscribe((rangeData: Data[]) => { this.filterData = rangeData;
       rangeData.forEach(y => {
-      //     this.name = y.disasterType;
-      //     if (!(this.name in this.lookup)) {
-      //       this.lookup[this.name] = 1;
-      //       this.result.push(this.name);
-      //     }
-      // });
-      // this.result.forEach(type => {
-      //   this.filterData.forEach(y => {
           this.occuranceLabels.push(y.year);
           this.deathLabels.push(y.year);
           this.economyLabels.push(y.year);
           this.affectedLabels.push(y.year);
-          this.totalDeaths.push(y.totalDeaths);
-          this.totalOccurance.push(y.occurrence);
-          this.economyDamage.push(y.totalDamage);
-          this.totalPeopleAffected.push(y.totalAffected);
-        // });
+          totalDeaths.push(y.totalDeaths);
+          totalOccurance.push(y.occurrence);
+          economyDamage.push(y.totalDamage);
+          totalPeopleAffected.push(y.totalAffected);
       });
-      this.deathData = [{data: this.totalDeaths, label: this.disasterDropdownValue}];
-      this.occuranceData = [{data: this.totalOccurance, label: this.disasterDropdownValue}];
-      this.economyData = [{data: this.economyDamage, label: this.disasterDropdownValue}];
-      this.affectedData = [{data: this.totalPeopleAffected, label: this.disasterDropdownValue}];
+      this.deathData = [{data: totalDeaths, label: this.disasterDropdownValue}];
+      this.occuranceData = [{data: totalOccurance, label: this.disasterDropdownValue}];
+      this.economyData = [{data: economyDamage, label: this.disasterDropdownValue}];
+      this.affectedData = [{data: totalPeopleAffected, label: this.disasterDropdownValue}];
       // console.log(this.fromValue);
     }, error => {});
   }

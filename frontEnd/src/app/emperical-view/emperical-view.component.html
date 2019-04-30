@@ -1,0 +1,43 @@
+<div class="bg p-3">
+  <h2><a class="text-white" href="/home">Natural Disaster Data Analysis</a></h2>
+</div>
+<div class="row">
+  <div class="col-12 text-center">
+    <label><h1>Empirical View</h1></label>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12 text-center">
+    <label><h3>Number of reported disaster events</h3></label>
+  </div>
+    <div class="col-12 text-center">
+      <canvas
+        baseChart
+        [chartType]="'line'"
+        [datasets]="reportedEventData"
+        [labels]="reportedEventLabels"
+        [options]="chartOptions"
+        [legend]="true"
+        [colors]="chartColors"
+        (chartClick)="onChartClick($event)">
+      </canvas>
+    </div>
+</div>
+
+<div class="row">
+  <div class="col-12 text-center">
+    <label><h3>Economy damage by Natural Disaster</h3></label>
+  </div>
+  <div class="col-12 text-center">
+    <canvas
+      baseChart
+      [chartType]="'line'"
+      [datasets]="economyDamageData"
+      [labels]="economyDamageLabels"
+      [options]="chartOptions"
+      [legend]="true"
+      [colors]="chartColors"
+      (chartClick)="onChartClick($event)">
+    </canvas>
+  </div>
+</div>
