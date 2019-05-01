@@ -7,31 +7,34 @@
   <!--<option *ngFor="let type of disasterType" value="{{type[0]}}">{{type[0]}}</option>-->
   <!--</select>-->
   <!--</div>-->
-  <div class="col-5 border border-secondary m-1 text-center">
+  <div class="col-sm-1"></div>
+  <div class="col-5 border border-secondary text-center">
     <label class="m-2"><b>Earthquake</b></label>
     <google-chart [type]="'GeoChart'" [data]="eGeo_data"></google-chart>
   </div>
-  <div class="col-5 border border-secondary m-1 text-center">
+  <div class="col-5 border border-secondary text-center">
     <label class="m-2"><b>Flood</b></label>
     <google-chart [type]="'GeoChart'" [data]="fGeo_data" ></google-chart>
   </div>
 </div>
 <div class="row mt-3 ml-5">
-  <div class="col-5 border border-secondary m-1 text-center">
+  <div class="col-sm-1"></div>
+  <div class="col-5 border border-secondary  text-center">
     <label class="m-2"><b>Storm</b></label>
     <google-chart [type]="'GeoChart'" [data]="sGeo_data" ></google-chart>
   </div>
-  <div class="col-5 border border-secondary m-1 text-center">
+  <div class="col-5 border border-secondary  text-center">
     <label class="m-2"><b>Landslide</b></label>
     <google-chart [type]="'GeoChart'" [data]="lGeo_data" ></google-chart>
   </div>
 </div>
 <div class="row mt-3 ml-5">
-  <div class="col-5 border border-secondary m-1 text-center">
+  <div class="col-sm-1"></div>
+  <div class="col-5 border border-secondary text-center">
     <label class="m-2"><b>Volcanic Activity</b></label>
     <google-chart [type]="'GeoChart'" [data]="vGeo_data" ></google-chart>
   </div>
-  <div class="col-5 border border-secondary m-1 text-center">
+  <div class="col-5 border border-secondary text-center">
     <label class="m-2"><b>Wildfire</b></label>
     <google-chart [type]="'GeoChart'" [data]="wGeo_data" ></google-chart>
   </div>

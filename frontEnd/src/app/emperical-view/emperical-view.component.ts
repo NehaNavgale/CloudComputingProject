@@ -11,11 +11,21 @@ import {range} from 'rxjs';
 export class EmpericalViewComponent implements OnInit {
 
   apiURL: String = 'http://127.0.0.1:5000/api';
+  fromValue = 1900;
+  toValue = 2018;
+  oldYear;
+  newYear;
+  eventOccured = [];
   reportedEventData = [];
   reportedEventLabels = [];
 
   economyDamageData = [];
   economyDamageLabels = [];
+
+  topTenDeadliestEvent;
+  eventsByDeath;
+  deathData = [];
+  deathLabels = [];
   filterData;
   data: Data[];
   constructor(private http: HttpClient) { }
@@ -42,8 +52,16 @@ export class EmpericalViewComponent implements OnInit {
   getData() {
     this.reportedEventLabels = [];
     this.economyDamageLabels = [];
+    this.deathLabels = [];
     const eventData = [];
     const damageData = [];
+
+    const etotalDeaths = [];
+    const wtotalDeaths = [];
+    const ltotalDeaths = [];
+    const stotalDeaths = [];
+    const vtotalDeaths = [];
+    const ftotalDeaths = [];
     this.http.get(this.apiURL + '/getReportedEvents').
     subscribe((rangeData: Data[]) => { this.filterData = rangeData;
       rangeData.forEach(y => {
@@ -57,6 +75,76 @@ export class EmpericalViewComponent implements OnInit {
       this.reportedEventData = [{data: eventData, label: 'Total Events'}];
       this.economyDamageData = [{data: damageData, label: 'Total Damage'}];
     }, error => {});
+
+    this.http.get(this.apiURL + '/tenDeadliest').
+    subscribe((rangeData: Data[]) => { this.topTenDeadliestEvent = rangeData;
+    }, error => {});
+
+    this.http.get(this.apiURL + '/totalDeath?from=' + this.fromValue + '&to=' + this.toValue).
+    subscribe((rangeData: Data[]) => { this.filterData = rangeData;
+      rangeData.forEach(y => {
+        this.newYear = y.year;
+        if (this.oldYear !== this.newYear || this.oldYear === null) {
+           this.deathLabels.push(y.year);
+           this.oldYear = y.year;
+           if (!this.eventOccured.includes('Earthquake')) {
+             etotalDeaths.push(0);
+           }
+          if (!this.eventOccured.includes('WildFire')) {
+            wtotalDeaths.push(0);
+          }
+          if (!this.eventOccured.includes('Landslide')) {
+            ltotalDeaths.push(0);
+          }
+          if (!this.eventOccured.includes('Storm')) {
+            stotalDeaths.push(0);
+          }
+          if (!this.eventOccured.includes('Volcanic')) {
+            vtotalDeaths.push(0);
+          }
+          if (!this.eventOccured.includes('Flood')) {
+            ftotalDeaths.push(0);
+          }
+           this.eventOccured = [];
+        }
+        if (y.disasterType === 'Earthquake') {
+          etotalDeaths.push(y.totalDeaths);
+          this.eventOccured.push('Earthquake');
+        } else if (y.disasterType === 'WildFire') {
+          wtotalDeaths.push(y.totalDeaths);
+          this.eventOccured.push('WildFire');
+        } else if (y.disasterType === 'Landslide') {
+          ltotalDeaths.push(y.totalDeaths);
+            this.eventOccured.push('Landslide');
+        } else if (y.disasterType === 'Storm') {
+          stotalDeaths.push(y.totalDeaths);
+            this.eventOccured.push('Storm');
+        } else if (y.disasterType === 'Volcanic') {
+          vtotalDeaths.push(y.totalDeaths);
+            this.eventOccured.push('Volcanic');
+        } else if (y.disasterType === 'Flood') {
+          ftotalDeaths.push(y.totalDeaths);
+            this.eventOccured.push('Flood');
+        }
+          // else {
+          //   ftotalDeaths.push(0);
+          // }
+      });
+      console.log(ftotalDeaths);
+      console.log(this.deathLabels);
+      this.deathData = [{data: etotalDeaths, label: 'Earthquake'},
+        {data: wtotalDeaths, label: 'WildFire'},
+        {data: ltotalDeaths, label: 'Landslide'},
+        {data: stotalDeaths, label: 'Storm'},
+        {data: vtotalDeaths, label: 'Volcanic'},
+        {data: ftotalDeaths, label: 'Flood'}];
+    }, error => {});
+
+    this.http.get(this.apiURL + '/deadliestEvent').
+    subscribe((rangeData: Data[]) => { this.eventsByDeath = rangeData;
+    }, error => {});
+
+
   }
 
   ngOnInit() {

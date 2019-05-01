@@ -89,6 +89,7 @@ def get_typeCompareData():
     return groupingSum.to_json(orient='records')
     # to_json(orient='records')
 
+
 @app.route('/api/countryCompare', methods=['GET'])
 def get_countryCompareData():
     data = load_data()
@@ -138,6 +139,38 @@ def get_ReportedEventData():
     frameType = pd.DataFrame(groupingSum)
     return frameType.to_json(orient='records')
 
+@app.route('/api/totalDeath', methods=['GET'])
+def get_totalDeath():
+    data = load_data()
+    from_year = request.args.get('from')
+    to_year = request.args.get('to')
+    rangeData = data[(data['year'].between(int(from_year), int(to_year), inclusive=True))]
+    # & (data['disasterType'] == disasterType)
+    groupingSum = (rangeData.groupby(['year', 'disasterType'], as_index=False)).sum()
+    # grouping = rangeData.groupby(['disasterType', 'year'], as_index=False)
+    # print(groupingSum.apply(lambda x: x.to_json(orient='records')))
+    return groupingSum.to_json(orient='records')
+    # to_json(orient='records')
+
+@app.route('/api/tenDeadliest', methods=['GET'])
+def get_tenDeadliestEvent():
+    data = load_data()
+    data.sort_values(["totalDeaths"], axis=0,
+                   ascending=False, inplace=True)
+    frameType = pd.DataFrame(data)
+    return frameType.to_json(orient='records')
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+@app.route('/api/deadliestEvent', methods=['GET'])
+def get_deadliestEvent():
+    data = load_data()
+    groupingSum = (data.groupby(['disasterType'], as_index=False)).sum()
+    groupingSum.sort_values(["occurrence"], axis=0,
+                     ascending=False, inplace=True)
+    frameType = pd.DataFrame(groupingSum)
+    return frameType.to_json(orient='records')
 
 if __name__ == '__main__':
     app.run(debug=True)
