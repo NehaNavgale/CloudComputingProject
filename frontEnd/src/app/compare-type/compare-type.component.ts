@@ -15,6 +15,9 @@ export class CompareTypeComponent implements OnInit {
   yearData;
   fromValue = 2010;
   toValue = 2018;
+  oldYear;
+  newYear;
+  eventOccured = [];
   filterData;
   // chart labels
   eOccuranceLabels = [];
@@ -118,41 +121,87 @@ export class CompareTypeComponent implements OnInit {
       this.countryDropDownValue).
     subscribe((rangeData: Data[]) => { this.filterData = rangeData;
       rangeData.forEach(y => {
+        this.newYear = y.year;
+        if (this.oldYear !== this.newYear || this.oldYear === null) {
+            this.eOccuranceLabels.push(y.year);
+            this.deathLabels.push(y.year);
+            this.affectedLabels.push(y.year);
+            this.economyLabels.push(y.year);
+
+          if (!this.eventOccured.includes('Earthquake')) {
+            eTotalOccurance.push(0);
+            etotalDeaths.push(0);
+            etotalPeopleAffected.push(0);
+            eEconomyAffected.push(0);
+          }
+          if (!this.eventOccured.includes('WildFire')) {
+            wTotalOccurance.push(0);
+            wtotalDeaths.push(0);
+            wtotalPeopleAffected.push(0);
+            wEconomyAffected.push(0);
+          }
+          if (!this.eventOccured.includes('Landslide')) {
+            lTotalOccurance.push(0);
+            ltotalDeaths.push(0);
+            ltotalPeopleAffected.push(0);
+            lEconomyAffected.push(0);
+          }
+          if (!this.eventOccured.includes('Storm')) {
+            sTotalOccurance.push(0);
+            stotalDeaths.push(0);
+            stotalPeopleAffected.push(0);
+            sEconomyAffected.push(0);
+          }
+          if (!this.eventOccured.includes('Volcanic')) {
+            vTotalOccurance.push(0);
+            vtotalDeaths.push(0);
+            vtotalPeopleAffected.push(0);
+            vEconomyAffected.push(0);
+          }
+          if (!this.eventOccured.includes('Flood')) {
+            fTotalOccurance.push(0);
+            ftotalDeaths.push(0);
+            ftotalPeopleAffected.push(0);
+            fEconomyAffected.push(0);
+          }
+          this.eventOccured = [];
+        }
         if (y.disasterType === 'Earthquake') {
           eTotalOccurance.push(y.occurrence);
           etotalDeaths.push(y.totalDeaths);
           etotalPeopleAffected.push(y.totalAffected);
           eEconomyAffected.push(y.totalDamage);
+          this.eventOccured.push('Earthquake');
         } else if (y.disasterType === 'WildFire') {
           wTotalOccurance.push(y.occurrence);
           wtotalDeaths.push(y.totalDeaths);
           wtotalPeopleAffected.push(y.totalAffected);
           wEconomyAffected.push(y.totalDamage);
+          this.eventOccured.push('WildFire');
         } else if (y.disasterType === 'Landslide') {
           lTotalOccurance.push(y.occurrence);
           ltotalDeaths.push(y.totalDeaths);
           ltotalPeopleAffected.push(y.totalAffected);
           lEconomyAffected.push(y.totalDamage);
+          this.eventOccured.push('Landslide');
         } else if (y.disasterType === 'Storm') {
           sTotalOccurance.push(y.occurrence);
           stotalDeaths.push(y.totalDeaths);
           stotalPeopleAffected.push(y.totalAffected);
           sEconomyAffected.push(y.totalDamage);
+          this.eventOccured.push('Storm');
         } else if (y.disasterType === 'Volcanic') {
           vTotalOccurance.push(y.occurrence);
           vtotalDeaths.push(y.totalDeaths);
           vtotalPeopleAffected.push(y.totalAffected);
           vEconomyAffected.push(y.totalDamage);
+          this.eventOccured.push('Volcanic');
         } else if (y.disasterType === 'Flood') {
           fTotalOccurance.push(y.occurrence);
           ftotalDeaths.push(y.totalDeaths);
           ftotalPeopleAffected.push(y.totalAffected);
           fEconomyAffected.push(y.totalDamage);
-        }
-        if (!this.eOccuranceLabels.includes(y.year)) {
-          this.eOccuranceLabels.push(y.year);
-          this.deathLabels.push(y.year);
-          this.affectedLabels.push(y.year);
+          this.eventOccured.push('Flood');
         }
       });
       this.occuranceData = [{data: eTotalOccurance, label: 'Earthquake'},

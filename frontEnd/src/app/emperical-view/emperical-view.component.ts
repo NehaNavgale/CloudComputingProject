@@ -23,7 +23,9 @@ export class EmpericalViewComponent implements OnInit {
   economyDamageLabels = [];
 
   topTenDeadliestEvent;
+  topCountriesByOccurance;
   eventsByDeath;
+  eventsByOccurance;
   deathData = [];
   deathLabels = [];
   filterData;
@@ -140,8 +142,16 @@ export class EmpericalViewComponent implements OnInit {
         {data: ftotalDeaths, label: 'Flood'}];
     }, error => {});
 
+    this.http.get(this.apiURL + '/occuranceEvent').
+    subscribe((rangeData: Data[]) => { this.eventsByOccurance = rangeData;
+    }, error => {});
+
     this.http.get(this.apiURL + '/deadliestEvent').
     subscribe((rangeData: Data[]) => { this.eventsByDeath = rangeData;
+    }, error => {});
+
+    this.http.get(this.apiURL + '/topCountries').
+    subscribe((rangeData: Data[]) => { this.topCountriesByOccurance = rangeData;
     }, error => {});
 
 

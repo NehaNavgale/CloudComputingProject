@@ -31,7 +31,7 @@
     </div>
     <div class="row ml-0">
       <div class="col-4">
-        <select style="width:250px !important;" (change)="countryDropdownChange($event.target.value)">
+        <select style="width:250px !important;" [(ngModel)]="countryDropDownValue" (change)="countryDropdownChange($event.target.value)">
           <option *ngFor="let country of countries" value="{{country[0]}}">{{country[0]}}</option>
         </select>
       </div>
@@ -41,7 +41,7 @@
     </div>
     <div class="row ml-0">
       <div class="col-6">
-        <select style="width:250px !important;" (change)="disasterDropdownChange($event.target.value)">
+        <select style="width:250px !important;" [(ngModel)]="disasterDropdownValue" (change)="disasterDropdownChange($event.target.value)">
           <option *ngFor="let type of disasterType" value="{{type[0]}}">{{type[0]}}</option>
         </select>
       </div>

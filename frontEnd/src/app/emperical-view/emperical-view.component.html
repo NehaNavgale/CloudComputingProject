@@ -44,34 +44,34 @@
   </div>
 </div>
 
-<div class="row">
-  <div class="col-12 text-center">
-    <label><h3>Total Death by Natural Disaster</h3></label>
-  </div>
-  <div class="col-2"></div>
-  <div class="col-8 text-center">
-    <canvas
-      baseChart
-      [chartType]="'line'"
-      [datasets]="deathData"
-      [labels]="deathLabels"
-      [options]="chartOptions"
-      [legend]="true"
-      (chartClick)="onChartClick($event)">
-    </canvas>
-  </div>
-</div>
+<!--<div class="row">-->
+  <!--<div class="col-12 text-center">-->
+    <!--<label><h3>Total Death by Natural Disaster</h3></label>-->
+  <!--</div>-->
+  <!--<div class="col-2"></div>-->
+  <!--<div class="col-8 text-center">-->
+    <!--<canvas-->
+      <!--baseChart-->
+      <!--[chartType]="'line'"-->
+      <!--[datasets]="deathData"-->
+      <!--[labels]="deathLabels"-->
+      <!--[options]="chartOptions"-->
+      <!--[legend]="true"-->
+      <!--(chartClick)="onChartClick($event)">-->
+    <!--</canvas>-->
+  <!--</div>-->
+<!--</div>-->
 
 <div class="row">
   <div class="col-12 text-center">
-    <label><h3>Ten deadliest natural disaster</h3></label>
+    <label><h3>Ten deadliest natural disaster events in history</h3></label>
   </div>
   <div class="col-2"></div>
   <div class="col-8">
-    <table class="border border-dark" style="width:100%">
+    <table class="table table-bordered table-striped table-sm" style="width:100%">
       <thead>
       <th>Event</th>
-      <th>Death</th>
+      <th>Death toll (estimate)</th>
       </thead>
       <tbody>
       <tr *ngFor="let event of (topTenDeadliestEvent | slice:0:10 )">
@@ -85,11 +85,32 @@
 
 <div class="row">
   <div class="col-12 text-center">
-    <label><h3>Ranking of Events</h3></label>
+    <label><h3>Ranking of Events based on occurance</h3></label>
   </div>
   <div class="col-2"></div>
   <div class="col-8">
-    <table class="border border-dark" style="width:100%">
+    <table class="table table-bordered table-striped table-sm" style="width:100%">
+      <thead>
+      <th>Event</th>
+      <!--<th>Death</th>-->
+      </thead>
+      <tbody>
+      <tr *ngFor="let event of (eventsByOccurance | slice:0:10 )">
+        <td>{{event.disasterType}}</td>
+        <!--<td>{{event.totalDeaths}}</td>-->
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12 text-center">
+    <label><h3>Ranking of Events based on death</h3></label>
+  </div>
+  <div class="col-2"></div>
+  <div class="col-8">
+    <table class="table table-bordered table-striped table-sm" style="width:100%">
       <thead>
       <th>Event</th>
       <!--<th>Death</th>-->
@@ -97,6 +118,27 @@
       <tbody>
       <tr *ngFor="let event of (eventsByDeath | slice:0:10 )">
         <td>{{event.disasterType}}</td>
+        <!--<td>{{event.totalDeaths}}</td>-->
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12 text-center">
+    <label><h3>Top 10 countries prone to natural disasters</h3></label>
+  </div>
+  <div class="col-2"></div>
+  <div class="col-8">
+    <table class="table table-bordered table-striped table-sm" style="width:100%">
+      <thead>
+      <th>Country</th>
+      <!--<th>Death</th>-->
+      </thead>
+      <tbody>
+      <tr *ngFor="let event of (topCountriesByOccurance | slice:0:10 )">
+        <td>{{event.countryName}}</td>
         <!--<td>{{event.totalDeaths}}</td>-->
       </tr>
       </tbody>

@@ -3,47 +3,58 @@
 </div>
 <div class="row">
   <div class="col-3 boxshadow1">
-    <div class="col-6">
-      <label>Compare Country</label>
+    <div class="row p-3">
+      <b><u>Period:</u></b>
     </div>
-    <div class="col-6">
-      <select style="width:250px !important;" (change)="firstCountryDropdownChange($event.target.value)">
-        <option *ngFor="let country of countries" value="{{country[0]}}">{{country[0]}}</option>
-      </select>
+    <div class="row ml-0">
+      <div class="col-2">
+        <label>From </label>
+      </div>
+      <div class="col-4">
+        <input type="text" class="form-control input-group-sm" list="dynmicFrom" [(ngModel)]="fromValue" (change)="onFromYearChange(fromValue)">
+        <datalist id="dynmicFrom">
+          <option *ngFor="let yearValues of yearData" [value]="yearValues[0]"></option>
+        </datalist>
+      </div>
+      <div class="col-2">
+        <label> To </label>
+      </div>
+      <div class="col-4">
+        <input type="text" class="form-control input-group-sm" list="dynmicTo" [(ngModel)]="toValue" (change)="onToYearChange(toValue)">
+        <datalist id="dynmicTo">
+          <option *ngFor="let yearValues of yearData" [value]="yearValues[0]"></option>
+        </datalist>
+      </div>
+    </div>
+    <div class="row p-3 mt-4">
+      <b><u>Compare Country:</u></b>
+    </div>
+    <div class="row ml-0">
+      <div class="col-4">
+        <select style="width:250px !important;" [(ngModel)]="firstCountryDropDownValue" (change)="firstCountryDropdownChange($event.target.value)">
+          <option *ngFor="let country of countries" value="{{country[0]}}">{{country[0]}}</option>
+        </select>
+      </div>
     </div>
     <div class="col-6">
       <label>and</label>
     </div>
-    <div class="col-6">
-      <select style="width:250px !important;" (change)="secondCountryDropdownChange($event.target.value)">
-        <option *ngFor="let country of countries" value="{{country[0]}}">{{country[0]}}</option>
-      </select>
+    <div class="row ml-0">
+      <div class="col-4">
+        <select style="width:250px !important;" [(ngModel)]="secondCountryDropDownValue" (change)="secondCountryDropdownChange($event.target.value)">
+          <option *ngFor="let country of countries" value="{{country[0]}}">{{country[0]}}</option>
+        </select>
+      </div>
     </div>
-    <div class="col-6">
-      <label>Disaster Type:</label>
+    <div class="row p-3 mt-4">
+      <b><u>Filter By Disaster Type:</u></b>
     </div>
-    <div class="col-6">
-      <select style="width:250px !important;" (change)="disasterDropdownChange($event.target.value)">
-        <option *ngFor="let type of disasterType" value="{{type[0]}}">{{type[0]}}</option>
-      </select>
-    </div>
-    <div class="col-6">
-      <label>Select Year From</label>
-    </div>
-    <div class="col-6">
-      <input type="text" class="form-control input-group-sm" list="dynmicFrom" [(ngModel)]="fromValue" (change)="onFromYearChange(fromValue)">
-      <datalist id="dynmicFrom">
-        <option *ngFor="let yearValues of yearData" [value]="yearValues[0]"></option>
-      </datalist>
-    </div>
-    <div class="col-6">
-      <label>To</label>
-    </div>
-    <div class="col-6">
-      <input type="text" class="form-control input-group-sm" list="dynmicTo" [(ngModel)]="toValue" (change)="onToYearChange(toValue)">
-      <datalist id="dynmicTo">
-        <option *ngFor="let yearValues of yearData" [value]="yearValues[0]"></option>
-      </datalist>
+    <div class="row ml-0">
+      <div class="col-6">
+        <select style="width:250px !important;" [(ngModel)]="disasterDropdownValue" (change)="disasterDropdownChange($event.target.value)">
+          <option *ngFor="let type of disasterType" value="{{type[0]}}">{{type[0]}}</option>
+        </select>
+      </div>
     </div>
   </div>
   <div class="col-9">

@@ -27,7 +27,6 @@ def display_data():
 def get_countrydata():
     data = load_data()
     countryData = data.countryName.unique()
-    print(countryData)
     frameCountry = pd.DataFrame(countryData)
     # frameCountry = frameCountry.sort_values(by=['countryName'])
     return frameCountry.to_json(orient='records')
@@ -167,6 +166,24 @@ if __name__ == '__main__':
 def get_deadliestEvent():
     data = load_data()
     groupingSum = (data.groupby(['disasterType'], as_index=False)).sum()
+    groupingSum.sort_values(["totalDeaths"], axis=0,
+                     ascending=False, inplace=True)
+    frameType = pd.DataFrame(groupingSum)
+    return frameType.to_json(orient='records')
+
+@app.route('/api/occuranceEvent', methods=['GET'])
+def get_occuranceEvent():
+    data = load_data()
+    groupingSum = (data.groupby(['disasterType'], as_index=False)).sum()
+    groupingSum.sort_values(["occurrence"], axis=0,
+                     ascending=False, inplace=True)
+    frameType = pd.DataFrame(groupingSum)
+    return frameType.to_json(orient='records')
+
+@app.route('/api/topCountries', methods=['GET'])
+def get_topCountries():
+    data = load_data()
+    groupingSum = (data.groupby(['countryName'], as_index=False)).sum()
     groupingSum.sort_values(["occurrence"], axis=0,
                      ascending=False, inplace=True)
     frameType = pd.DataFrame(groupingSum)
